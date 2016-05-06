@@ -94,8 +94,8 @@ nnoremap <Leader>9 :buffer 9<CR>
 
 " bufexplorer
 nnoremap <Leader>e :BufExplorer<CR>
-nnoremap <Leader>s :BufExplorerHorizontalSplit<CR>
-nnoremap <Leader>v :BufExplorerVerticalSplit<CR>
+nnoremap <Leader>s :split<CR>:BufExplorer<CR>
+nnoremap <Leader>v :vsplit<CR>:BufExplorer<CR>
 
 " NERD Commenter
 map <Leader>c <plug>NERDComComment
