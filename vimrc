@@ -23,6 +23,9 @@ Plugin 'rdnetto/ycm-generator'
 " Tagbar: source navigation
 Plugin 'majutsushi/tagbar'
 
+" The NERD Tree: file navigation
+Plugin 'scrooloose/nerdtree'
+
 " The NERD Commenter: code commenting
 Plugin 'scrooloose/nerdcommenter'
 
@@ -52,6 +55,9 @@ filetype plugin indent on    " required
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#buffer_nr_show = 1
 
+" buf-explorer
+let g:bufExplorerDisableDefaultKeyMapping=1
+
 " +------------+
 " | Key Remaps |
 " +------------+
@@ -59,31 +65,47 @@ let g:airline#extensions#tabline#buffer_nr_show = 1
 " Set leader key
 let mapleader = " "
 
+" Clear hlsearch
+nnoremap <C-c> :nohlsearch<CR>
+
+" Window navigation
+nnoremap <Tab> <C-w>w
+nnoremap <C-down> :res -1<CR>
+nnoremap <C-up> :res +1<CR>
+nnoremap <C-left> :vertical resize -1<CR>
+nnoremap <C-right> :vertical resize +1<CR>
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-h> <C-w>h
+nnoremap <C-l> <C-w>l
+
+" Buffer movement
+nnoremap <Leader>] :bnext<CR>
+nnoremap <Leader>[ :bprevious<CR>
+nnoremap <Leader>1 :buffer 1<CR>
+nnoremap <Leader>2 :buffer 2<CR>
+nnoremap <Leader>3 :buffer 3<CR>
+nnoremap <Leader>4 :buffer 4<CR>
+nnoremap <Leader>5 :buffer 5<CR>
+nnoremap <Leader>6 :buffer 6<CR>
+nnoremap <Leader>7 :buffer 7<CR>
+nnoremap <Leader>8 :buffer 8<CR>
+nnoremap <Leader>9 :buffer 9<CR>
+
+" bufexplorer
+nnoremap <Leader>e :BufExplorer<CR>
+nnoremap <Leader>s :BufExplorerHorizontalSplit<CR>
+nnoremap <Leader>v :BufExplorerVerticalSplit<CR>
+
+" NERD Commenter
+map <Leader>c <plug>NERDComComment
+map <Leader>u <plug>NERDComUncommentLine
+
+" NERD Tree
+map <Leader>n :NERDTreeToggle<CR>
+
 " Toggle tag bar
 nnoremap <leader>t :TagbarToggle<CR>
-
-" Clear hlsearch
-nnoremap <c-l> :nohlsearch<CR>
-
-" Split navigation
-set splitright
-set splitbelow
-map <Tab> <C-w>w
-map <C-_> :sp<cr>
-map <C-\> :vsp<cr>                   
-map <C-down> :res -1<cr>
-map <C-up> :res +1<cr>
-map <C-left> :vertical resize -1<cr>
-map <C-right> :vertical resize +1<cr>
-map <C-j> <C-w>j
-map <C-k> <C-w>k
-map <C-h> <C-w>h
-map <C-l> <C-w>l
-map <Down> <C-e>j
-map <Up> <C-y>k
-map <Leader>] :bn<cr>
-map <Leader>[ :bp<cr>
-map <Leader>b :bd<cr>
 
 " +---------------+
 " | Miscellaneous |
@@ -94,6 +116,10 @@ syntax on
 
 " Allow modified buffers to be hidden
 set hidden
+
+" Split behavior
+set splitright
+set splitbelow
 
 " Search options
 set hlsearch
