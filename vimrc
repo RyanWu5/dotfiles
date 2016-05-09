@@ -1,6 +1,5 @@
 " .vimrc
 " Ryan Wu
-"
 
 " +------------+
 " | My Plugins |
@@ -34,14 +33,23 @@ Plugin 'tpope/vim-fugitive'
 
 " vim-airline: status bar
 Plugin 'bling/vim-airline'
-"Plugin 'vim-airline/vim-airline-themes'
-"Plugin 'powerline/fonts'
+Plugin 'vim-airline/vim-airline-themes'
+Plugin 'powerline/fonts'
 
 " ctrlp: fuzzy finder
 Plugin 'kien/ctrlp.vim'
 
 " bufexplorer: buffer navigation
 Plugin 'jlanzarotta/bufexplorer'
+
+" vim-tmux-navigator: vim-tmux integration
+Plugin 'christoomey/vim-tmux-navigator'
+
+" Tmuxline.vim: vim-style tmux status bar
+Plugin 'edkolev/tmuxline.vim'
+
+" Wombat256: colorscheme
+Plugin 'vim-scripts/wombat256.vim'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -52,11 +60,12 @@ filetype plugin indent on    " required
 " +----------------------+
 
 " vim-airline
+let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#buffer_nr_show = 1
 
-" buf-explorer
-let g:bufExplorerDisableDefaultKeyMapping=1
+" bufexplorer
+let g:bufExplorerDisableDefaultKeyMapping = 1
 
 " +------------+
 " | Key Remaps |
@@ -79,7 +88,7 @@ nnoremap <C-k> <C-w>k
 nnoremap <C-h> <C-w>h
 nnoremap <C-l> <C-w>l
 
-" Buffer movement
+" Buffer navigation
 nnoremap <Leader>] :bnext<CR>
 nnoremap <Leader>[ :bprevious<CR>
 nnoremap <Leader>1 :buffer 1<CR>
@@ -96,6 +105,8 @@ nnoremap <Leader>9 :buffer 9<CR>
 nnoremap <Leader>e :BufExplorer<CR>
 nnoremap <Leader>s :split<CR>:BufExplorer<CR>
 nnoremap <Leader>v :vsplit<CR>:BufExplorer<CR>
+nnoremap <Leader>S :split<CR>
+nnoremap <Leader>V :vsplit<CR>
 
 " NERD Commenter
 map <Leader>c <plug>NERDComComment
@@ -107,12 +118,28 @@ map <Leader>n :NERDTreeToggle<CR>
 " Toggle tag bar
 nnoremap <leader>t :TagbarToggle<CR>
 
+" +------------+
+" | Appearance |
+" +------------+
+
+" Syntax highlighting
+syntax enable
+
+" Persistent status bar
+set laststatus=2
+
+" Line numbers
+set number  
+
+" Colorscheme
+colorscheme wombat256mod
+
+" vim-airline theme
+let g:airline_theme = 'wombat'
+
 " +---------------+
 " | Miscellaneous |
 " +---------------+
-
-" Syntax highlighting
-syntax on
 
 " Allow modified buffers to be hidden
 set hidden
@@ -126,12 +153,6 @@ set hlsearch
 set incsearch
 nnoremap / /\v
 nnoremap ? ?\v
-
-" Persistent status bar
-set laststatus=2
-
-" Line numbers
-set number  
 
 " Tab width
 set shiftwidth=4
