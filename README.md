@@ -1,5 +1,5 @@
-# vimrc
-My vimrc
+# dotfiles
+My dotfiles
 
 # Installation
 1. Run './install.sh'
