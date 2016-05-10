@@ -79,7 +79,7 @@ popd
 
 # xclip (for tmux vi-copy)
 echo "Installing xclip..."
-sudo apt-get install xclip
+apt-get install xclip
 
 # Tagbar
 echo "Installing exuberant-ctags..."

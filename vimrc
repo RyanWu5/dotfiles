@@ -85,8 +85,8 @@ nnoremap <C-h> <C-w>h
 nnoremap <C-l> <C-w>l
 
 " Buffer navigation
-nnoremap <Leader>] :bnext<CR>
-nnoremap <Leader>[ :bprevious<CR>
+nnoremap <Leader>n :bnext<CR>
+nnoremap <Leader>p :bprevious<CR>
 nnoremap <Leader>1 :buffer 1<CR>
 nnoremap <Leader>2 :buffer 2<CR>
 nnoremap <Leader>3 :buffer 3<CR>
@@ -105,6 +105,7 @@ nnoremap <Leader>S :split<CR>
 nnoremap <Leader>V :vsplit<CR>
 
 " NERD Commenter
+"FIXME: not working
 map <Leader>c <plug>NERDComComment
 map <Leader>u <plug>NERDComUncommentLine
 
