@@ -15,10 +15,6 @@ call vundle#begin()
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
 
-" youcompleteme: autocompletion
-Plugin 'valloric/youcompleteme'
-Plugin 'rdnetto/ycm-generator'
-
 " Tagbar: source navigation
 Plugin 'majutsushi/tagbar'
 

@@ -51,9 +51,6 @@ update_file ~/.vimrc vimrc
 # Update tmux.conf
 update_file ~/.tmux.conf tmux.conf
 
-# Update tmux.conf
-update_file ~/.Xresources Xresources
-
 # Update vimrc plugins
 echo "Updating vim plugins..."
 vim +PluginClean +PluginInstall +qall
@@ -80,13 +77,10 @@ pushd ~/.vim/bundle/fonts
 	./install.sh
 popd
 
-# YouCompleteMe
-echo "Installing YouCompleteMe..."
-apt-get install build-essential cmake python-dev python3-dev clang
-pushd ~/.vim/bundle/youcompleteme
-	./install.py --clang-completer
-popd
+# xclip (for tmux vi-copy)
+echo "Installing xclip..."
+sudo apt-get install xclip
 
 # Tagbar
-echo "Installing Tagbar..."
+echo "Installing exuberant-ctags..."
 apt-get install exuberant-ctags
