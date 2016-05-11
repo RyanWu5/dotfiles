@@ -38,6 +38,9 @@ Plugin 'kien/ctrlp.vim'
 " bufexplorer: buffer navigation
 Plugin 'jlanzarotta/bufexplorer'
 
+" neocomplete: autocompletion
+Plugin 'Shougo/neocomplete.vim'
+
 " vim-tmux-navigator: vim-tmux integration
 Plugin 'christoomey/vim-tmux-navigator'
 
@@ -62,6 +65,9 @@ let g:airline#extensions#tabline#buffer_nr_show = 1
 
 " bufexplorer
 let g:bufExplorerDisableDefaultKeyMapping = 1
+
+" neocomplete
+let g:neocomplete#enable_at_startup = 1
 
 " +------------+
 " | Key Remaps |
@@ -114,6 +120,12 @@ map <Leader>n :NERDTreeToggle<CR>
 
 " Toggle tag bar
 nnoremap <leader>t :TagbarToggle<CR>
+
+" Move up and down in autocomplete
+inoremap <expr><C-j> "\<C-n>"
+inoremap <expr><C-k> "\<C-p>"
+inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+inoremap <expr><CR>  pumvisible() ? "\<C-y>" : "\<CR>"
 
 " +------------+
 " | Appearance |
