@@ -21,11 +21,23 @@ Plugin 'majutsushi/tagbar'
 " The NERD Tree: file navigation
 Plugin 'scrooloose/nerdtree'
 
-" The NERD Commenter: code commenting
-Plugin 'scrooloose/nerdcommenter'
-
 " vim.fugitive: git integration
 Plugin 'tpope/vim-fugitive'
+
+" vim.surround: insert surrounding pairs
+Plugin 'tpope/vim-surround'
+
+" vim.commentary: code commenting with gc
+Plugin 'tpope/vim-commentary'
+
+" vim.eunuch: shell commands
+Plugin 'tpope/vim-eunuch'
+
+" vim.repeat: repeat for plugins
+Plugin 'tpope/vim-repeat'
+
+" Tabular: tab alignment
+Plugin 'godlygeek/tabular'
 
 " vim-airline: status bar
 Plugin 'bling/vim-airline'
@@ -38,6 +50,9 @@ Plugin 'kien/ctrlp.vim'
 " bufexplorer: buffer navigation
 Plugin 'jlanzarotta/bufexplorer'
 
+" WindowSnap: swap windows with <Leader>ww
+Plugin 'wesQ3/vim-windowswap'
+
 " neocomplete: autocompletion
 Plugin 'Shougo/neocomplete.vim'
 
@@ -47,8 +62,8 @@ Plugin 'christoomey/vim-tmux-navigator'
 " Tmuxline.vim: vim-style tmux status bar
 Plugin 'edkolev/tmuxline.vim'
 
-" Wombat256: colorscheme
-Plugin 'vim-scripts/wombat256.vim'
+" hybrid: colorscheme
+Plugin 'w0ng/vim-hybrid'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -69,63 +84,84 @@ let g:bufExplorerDisableDefaultKeyMapping = 1
 " neocomplete
 let g:neocomplete#enable_at_startup = 1
 
+" ctrlp
+let g:ctrlp_regexp = 1
+
 " +------------+
 " | Key Remaps |
 " +------------+
+
+" Make Vim recognize XTerm escape sequences for Page and Arrow
+" keys combined with modifiers such as Shift, Control, and Alt.
+" See http://www.reddit.com/r/vim/comments/1a29vk/_/c8tze8p
+if &term =~ '^screen'
+	" Page keys http://sourceforge.net/p/tmux/tmux-code/ci/master/tree/FAQ
+	execute "set t_kP=\e[5;*~"
+	execute "set t_kN=\e[6;*~"
+
+	" Arrow keys http://unix.stackexchange.com/a/34723
+	execute "set <xUp>=\e[1;*A"
+	execute "set <xDown>=\e[1;*B"
+	execute "set <xRight>=\e[1;*C"
+	execute "set <xLeft>=\e[1;*D"
+endif
 
 " Set leader key
 let mapleader = " "
 
 " Clear hlsearch
-nnoremap <C-c> :nohlsearch<CR>
+nmap <C-c> :nohlsearch<CR>
 
 " Window navigation
-nnoremap <Tab> <C-w>w
-nnoremap <C-down> :res -1<CR>
-nnoremap <C-up> :res +1<CR>
-nnoremap <C-left> :vertical resize -1<CR>
-nnoremap <C-right> :vertical resize +1<CR>
-nnoremap <C-j> <C-w>j
-nnoremap <C-k> <C-w>k
-nnoremap <C-h> <C-w>h
-nnoremap <C-l> <C-w>l
+nmap <C-j>     <C-w>j
+nmap <C-k>     <C-w>k
+nmap <C-h>     <C-w>h
+nmap <C-l>     <C-w>l
+nmap <Tab>     <C-w>w
+nmap <C-down>  :resize -1<CR>
+nmap <C-up>    :resize +1<CR>
+nmap <C-left>  :vertical resize -1<CR>
+nmap <C-right> :vertical resize +1<CR>
+nmap <S-down>  <C-w>J
+nmap <S-up>    <C-w>K
+nmap <S-left>  <C-w>H
+nmap <S-right> <C-w>L
 
 " Buffer navigation
-nnoremap <Leader>n :bnext<CR>
-nnoremap <Leader>p :bprevious<CR>
-nnoremap <Leader>1 :buffer 1<CR>
-nnoremap <Leader>2 :buffer 2<CR>
-nnoremap <Leader>3 :buffer 3<CR>
-nnoremap <Leader>4 :buffer 4<CR>
-nnoremap <Leader>5 :buffer 5<CR>
-nnoremap <Leader>6 :buffer 6<CR>
-nnoremap <Leader>7 :buffer 7<CR>
-nnoremap <Leader>8 :buffer 8<CR>
-nnoremap <Leader>9 :buffer 9<CR>
+nmap <Leader>n :bnext<CR>
+nmap <Leader>p :bprevious<CR>
+nmap <Leader>1 :buffer 1<CR>
+nmap <Leader>2 :buffer 2<CR>
+nmap <Leader>3 :buffer 3<CR>
+nmap <Leader>4 :buffer 4<CR>
+nmap <Leader>5 :buffer 5<CR>
+nmap <Leader>6 :buffer 6<CR>
+nmap <Leader>7 :buffer 7<CR>
+nmap <Leader>8 :buffer 8<CR>
+nmap <Leader>9 :buffer 9<CR>
 
 " bufexplorer
-nnoremap <Leader>e :BufExplorer<CR>
-nnoremap <Leader>s :split<CR>:BufExplorer<CR>
-nnoremap <Leader>v :vsplit<CR>:BufExplorer<CR>
-nnoremap <Leader>S :split<CR>
-nnoremap <Leader>V :vsplit<CR>
-
-" NERD Commenter
-"FIXME: not working
-map <Leader>c <plug>NERDComComment
-map <Leader>u <plug>NERDComUncommentLine
+nmap <Leader>e :BufExplorer<CR>
+nmap <Leader>s :split<CR>:BufExplorer<CR>
+nmap <Leader>v :vsplit<CR>:BufExplorer<CR>
+nmap <Leader>S :split<CR>
+nmap <Leader>V :vsplit<CR>
 
 " NERD Tree
-map <Leader>n :NERDTreeToggle<CR>
+map <Leader>f :NERDTreeToggle<CR>
 
 " Toggle tag bar
-nnoremap <leader>t :TagbarToggle<CR>
+nmap <leader>t :TagbarToggle<CR>
 
-" Move up and down in autocomplete
-inoremap <expr><C-j> "\<C-n>"
-inoremap <expr><C-k> "\<C-p>"
-inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-inoremap <expr><CR>  pumvisible() ? "\<C-y>" : "\<CR>"
+" neocomplete
+imap <expr><C-j> "\<C-n>"
+imap <expr><C-k> "\<C-p>"
+imap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
+imap <expr><CR>  pumvisible() ? "\<C-y>" : "\<CR>"
+
+" Tabular
+nmap <Leader><Tab> :Tabularize /
+vmap <Leader><Tab> :Tabularize /
 
 " +------------+
 " | Appearance |
@@ -134,14 +170,25 @@ inoremap <expr><CR>  pumvisible() ? "\<C-y>" : "\<CR>"
 " Syntax highlighting
 syntax enable
 
+" Show cursor line
+set cursorline
+
 " Persistent status bar
 set laststatus=2
 
 " Line numbers
-set number  
+set number
+
+" Tab width
+set shiftwidth=4
+set tabstop=4
 
 " Colorscheme
-colorscheme wombat256mod
+set background=dark
+colorscheme hybrid
+
+" Set background to black
+highlight Normal ctermbg=None
 
 " vim-airline theme
 let g:airline_theme = 'wombat'
@@ -160,12 +207,8 @@ set splitbelow
 " Search options
 set hlsearch
 set incsearch
-nnoremap / /\v
-nnoremap ? ?\v
-
-" Tab width
-set shiftwidth=4
-set tabstop=4
+nmap / /\v
+nmap ? ?\v
 
 " Copy/paste from the system clipboard
 set clipboard=unnamedplus
