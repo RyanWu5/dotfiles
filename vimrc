@@ -187,6 +187,9 @@ set tabstop=4
 set background=dark
 colorscheme hybrid
 
+" Set primary text to white
+highlight Normal ctermfg=White
+
 " Set background to black
 highlight Normal ctermbg=None
 
