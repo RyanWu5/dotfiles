@@ -84,9 +84,6 @@ let g:bufExplorerDisableDefaultKeyMapping = 1
 " neocomplete
 let g:neocomplete#enable_at_startup = 1
 
-" ctrlp
-let g:ctrlp_regexp = 1
-
 " +------------+
 " | Key Remaps |
 " +------------+
