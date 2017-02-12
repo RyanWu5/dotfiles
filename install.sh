@@ -45,6 +45,20 @@ update_file () {
 	echo "Done"
 }
 
+# Install vim with system clipboard capability
+echo "Installing vim..."
+apt-get install vim-gnome
+
+# Install tmux
+echo "Installing tmux..."
+apt-get install tmux
+
+# Install Vundle
+echo "Checking Vundle install..."
+if [ ! -d "$HOME/.vim/bundle/Vundle.vim" ]; then
+	git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+fi
+
 # Update vimrc
 update_file ~/.vimrc vimrc
 
