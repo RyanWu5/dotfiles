@@ -159,6 +159,12 @@ nmap <leader>t :TagbarToggle<CR>
 nmap <Leader><Tab> :Tabularize /
 vmap <Leader><Tab> :Tabularize /
 
+" fugitive
+nmap <Leader>gb :Gblame
+nmap <Leader>gd :Gdiff
+nmap <Leader>gl :Glog
+nmap <Leader>gs :Gstatus
+
 " +------------+
 " | Appearance |
 " +------------+
