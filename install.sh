@@ -47,11 +47,11 @@ update_file () {
 
 # Install vim with system clipboard capability
 echo "Installing vim..."
-apt-get install vim-gnome
+apt-get install -y vim-gnome
 
 # Install tmux
 echo "Installing tmux..."
-apt-get install tmux
+apt-get install -y tmux
 
 # Install Vundle
 echo "Checking Vundle install..."
@@ -93,16 +93,16 @@ popd
 
 # xclip (for tmux vi-copy)
 echo "Installing xclip..."
-apt-get install xclip
+apt-get install -y xclip
 
 # Tagbar
 echo "Installing exuberant-ctags..."
-apt-get install exuberant-ctags
+apt-get install -y exuberant-ctags
 
 # Configure YouCompleteMe
 echo "Installing Clang and CMake..."
-apt-get install build-essential cmake
-apt-get install python-dev python3-dev
+apt-get install -y build-essential cmake
+apt-get install -y python-dev python3-dev
 pushd ~/.vim/bundle/youcompleteme
 ./install.py --clang-completer
 popd
