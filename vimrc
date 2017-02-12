@@ -24,6 +24,9 @@ Plugin 'scrooloose/nerdtree'
 " vim.fugitive: git integration
 Plugin 'tpope/vim-fugitive'
 
+" gitgutter: gutter diff
+Plugin 'airblade/vim-gitgutter'
+
 " vim.surround: insert surrounding pairs
 Plugin 'tpope/vim-surround'
 
