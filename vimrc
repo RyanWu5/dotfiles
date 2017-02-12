@@ -150,7 +150,7 @@ nmap <Leader>S :split<CR>
 nmap <Leader>V :vsplit<CR>
 
 " NERD Tree
-map <Leader>f :NERDTreeToggle<CR>
+map <Leader>n :NERDTreeToggle<CR>
 
 " Toggle tag bar
 nmap <leader>t :TagbarToggle<CR>
