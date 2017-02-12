@@ -98,3 +98,11 @@ apt-get install xclip
 # Tagbar
 echo "Installing exuberant-ctags..."
 apt-get install exuberant-ctags
+
+# Configure YouCompleteMe
+echo "Installing Clang and CMake..."
+apt-get install build-essential cmake
+apt-get install python-dev python3-dev
+pushd ~/.vim/bundle/youcompleteme
+./install.py --clang-completer
+popd

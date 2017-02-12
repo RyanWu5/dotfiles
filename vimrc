@@ -53,8 +53,11 @@ Plugin 'jlanzarotta/bufexplorer'
 " WindowSnap: swap windows with <Leader>ww
 Plugin 'wesQ3/vim-windowswap'
 
-" neocomplete: autocompletion
-Plugin 'Shougo/neocomplete.vim'
+" youcompleteme: autocompletion
+Plugin 'valloric/youcompleteme'
+
+" ycm-generator: ycm config files
+Plugin 'rdnetto/ycm-generator'
 
 " vim-tmux-navigator: vim-tmux integration
 Plugin 'christoomey/vim-tmux-navigator'
@@ -80,9 +83,6 @@ let g:airline#extensions#tabline#buffer_nr_show = 1
 
 " bufexplorer
 let g:bufExplorerDisableDefaultKeyMapping = 1
-
-" neocomplete
-let g:neocomplete#enable_at_startup = 1
 
 " +------------+
 " | Key Remaps |
@@ -151,12 +151,6 @@ map <Leader>f :NERDTreeToggle<CR>
 
 " Toggle tag bar
 nmap <leader>t :TagbarToggle<CR>
-
-" neocomplete
-imap <expr><C-j> "\<C-n>"
-imap <expr><C-k> "\<C-p>"
-imap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
-imap <expr><CR>  pumvisible() ? "\<C-y>" : "\<CR>"
 
 " Tabular
 nmap <Leader><Tab> :Tabularize /
