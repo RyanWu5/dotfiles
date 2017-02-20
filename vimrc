@@ -165,6 +165,9 @@ nmap <Leader>gd :Gdiff<CR>
 nmap <Leader>gl :Glog<CR>
 nmap <Leader>gs :Gstatus<CR>
 
+" YouCompleteMe
+nmap <Leader>y :YcmCompleter GoTo<CR>
+
 " +------------+
 " | Appearance |
 " +------------+
