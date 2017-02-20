@@ -129,8 +129,6 @@ nmap <S-right> <C-w>L
 nmap <Leader>= <C-w>=
 
 " Buffer navigation
-nmap <Leader>] :bnext<CR>
-nmap <Leader>[ :bprevious<CR>
 nmap <Leader>1 :buffer 1<CR>
 nmap <Leader>2 :buffer 2<CR>
 nmap <Leader>3 :buffer 3<CR>
@@ -140,6 +138,8 @@ nmap <Leader>6 :buffer 6<CR>
 nmap <Leader>7 :buffer 7<CR>
 nmap <Leader>8 :buffer 8<CR>
 nmap <Leader>9 :buffer 9<CR>
+nmap <Leader>n :bnext<CR>
+nmap <Leader>p :bprevious<CR>
 nmap <Leader>l :buffer #<CR>
 
 " bufexplorer
@@ -150,7 +150,7 @@ nmap <Leader>S :split<CR>
 nmap <Leader>V :vsplit<CR>
 
 " NERD Tree
-map <Leader>n :NERDTreeToggle<CR>
+map <Leader>f :NERDTreeToggle<CR>
 
 " Toggle tag bar
 nmap <leader>t :TagbarToggle<CR>
