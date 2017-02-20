@@ -160,10 +160,10 @@ nmap <Leader><Tab> :Tabularize /
 vmap <Leader><Tab> :Tabularize /
 
 " fugitive
-nmap <Leader>gb :Gblame
-nmap <Leader>gd :Gdiff
-nmap <Leader>gl :Glog
-nmap <Leader>gs :Gstatus
+nmap <Leader>gb<CR> :Gblame
+nmap <Leader>gd<CR> :Gdiff
+nmap <Leader>gl<CR> :Glog
+nmap <Leader>gs<CR> :Gstatus
 
 " +------------+
 " | Appearance |
