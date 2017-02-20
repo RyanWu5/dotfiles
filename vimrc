@@ -118,7 +118,6 @@ nmap <C-j>     <C-w>j
 nmap <C-k>     <C-w>k
 nmap <C-h>     <C-w>h
 nmap <C-l>     <C-w>l
-nmap <Tab>     <C-w>w
 nmap <C-down>  :resize -1<CR>
 nmap <C-up>    :resize +1<CR>
 nmap <C-left>  :vertical resize -1<CR>
