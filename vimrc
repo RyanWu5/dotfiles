@@ -166,7 +166,9 @@ nmap <Leader>gl :Glog<CR>
 nmap <Leader>gs :Gstatus<CR>
 
 " YouCompleteMe
-nmap <Leader>y :YcmCompleter GoTo<CR>
+nmap <Leader>yc :YcmCompleter GoToDeclaration<CR>
+nmap <Leader>yf :YcmCompleter GoToDefinition<CR>
+nmap <Leader>yt :YcmCompleter GetType<CR>
 
 " +------------+
 " | Appearance |
