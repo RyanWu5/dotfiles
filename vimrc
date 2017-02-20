@@ -53,9 +53,6 @@ Plugin 'kien/ctrlp.vim'
 " bufexplorer: buffer navigation
 Plugin 'jlanzarotta/bufexplorer'
 
-" WindowSnap: swap windows with <Leader>ww
-Plugin 'wesQ3/vim-windowswap'
-
 " youcompleteme: autocompletion
 Plugin 'valloric/youcompleteme'
 
