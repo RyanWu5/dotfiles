@@ -86,10 +86,18 @@ TMUXLINE_SNAPFILE="~/.tmuxline.snap"
 tmux new 'vim +"TmuxlineSnapshot! $TMUXLINE_SNAPFILE" +qall'
 
 # Powerline fonts
-echo "Installing powerline fonts..."
-pushd ~/.vim/bundle/fonts
-	./install.sh
-popd
+read -p "Install powerline fonts? [y|n]: " result
+if [ "$result" == "y" -o "$result" == "Y" ]; then
+	pushd ~/.vim/bundle/fonts
+		./install.sh
+	popd
+	echo "Installed powerline fonts"
+elif [ "$result" == "n" -o "$result" == "N" ]; then
+	echo "Skipped installing powerline fonts"
+else
+	echo "ERR: Unknown option \"$result\""
+	exit 1
+fi
 
 # xclip (for tmux vi-copy)
 echo "Installing xclip..."
@@ -103,6 +111,16 @@ apt-get install -y exuberant-ctags
 echo "Installing Clang and CMake..."
 apt-get install -y build-essential cmake
 apt-get install -y python-dev python3-dev
-pushd ~/.vim/bundle/youcompleteme
-./install.py --clang-completer
-popd
+read -p "Compile Clang completer for YouCompleteMe? [y|n]: " result
+if [ "$result" == "y" -o "$result" == "Y" ]; then
+	pushd ~/.vim/bundle/youcompleteme
+	./install.py --clang-completer
+	popd
+	cp $src $dst
+	echo "Compiled Clang completer"
+elif [ "$result" == "n" -o "$result" == "N" ]; then
+	echo "Skipped compiling Clang completer"
+else
+	echo "ERR: Unknown option \"$result\""
+	exit 1
+fi
