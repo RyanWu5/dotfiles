@@ -84,6 +84,10 @@ let g:airline#extensions#tabline#buffer_nr_show = 1
 " bufexplorer
 let g:bufExplorerDisableDefaultKeyMapping = 1
 
+" YouCompleteMe
+let g:ycm_confirm_extra_conf = 0
+let g:ycm_autoclose_preview_window_after_completion = 1
+
 " +------------+
 " | Key Remaps |
 " +------------+
