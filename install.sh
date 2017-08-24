@@ -116,7 +116,6 @@ if [ "$result" == "y" -o "$result" == "Y" ]; then
 	pushd ~/.vim/bundle/youcompleteme
 	./install.py --clang-completer
 	popd
-	cp $src $dst
 	echo "Compiled Clang completer"
 elif [ "$result" == "n" -o "$result" == "N" ]; then
 	echo "Skipped compiling Clang completer"
