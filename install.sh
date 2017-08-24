@@ -47,11 +47,11 @@ update_file () {
 
 # Install vim with system clipboard capability
 echo "Installing vim..."
-apt-get install -y vim-gnome
+sudo apt-get install -y vim-gnome
 
 # Install tmux
 echo "Installing tmux..."
-apt-get install -y tmux
+sudo apt-get install -y tmux
 
 # Install Vundle
 echo "Checking Vundle install..."
@@ -101,16 +101,16 @@ fi
 
 # xclip (for tmux vi-copy)
 echo "Installing xclip..."
-apt-get install -y xclip
+sudo apt-get install -y xclip
 
 # Tagbar
 echo "Installing exuberant-ctags..."
-apt-get install -y exuberant-ctags
+sudo apt-get install -y exuberant-ctags
 
 # Configure YouCompleteMe
 echo "Installing Clang and CMake..."
-apt-get install -y build-essential cmake
-apt-get install -y python-dev python3-dev
+sudo apt-get install -y build-essential cmake
+sudo apt-get install -y python-dev python3-dev
 read -p "Compile Clang completer for YouCompleteMe? [y|n]: " result
 if [ "$result" == "y" -o "$result" == "Y" ]; then
 	pushd ~/.vim/bundle/youcompleteme
