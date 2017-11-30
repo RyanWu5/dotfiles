@@ -222,3 +222,6 @@ nmap ? ?\v
 
 " Copy/paste from the system clipboard
 set clipboard=unnamedplus
+
+" Set encoding required by YouCompleteMe
+set encoding=utf-8
