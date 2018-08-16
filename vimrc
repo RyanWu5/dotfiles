@@ -47,8 +47,9 @@ Plugin 'bling/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 Plugin 'powerline/fonts'
 
-" ctrlp: fuzzy finder
-Plugin 'kien/ctrlp.vim'
+" fzf: fuzzy finder
+set rtp+=~/.fzf
+Plugin 'junegunn/fzf.vim'
 
 " bufexplorer: buffer navigation
 Plugin 'jlanzarotta/bufexplorer'
@@ -165,6 +166,9 @@ nmap <Leader>gd :Gdiff<CR>
 nmap <Leader>gl :Glog<CR>
 nmap <Leader>gs :Gstatus<CR>
 
+" fzf
+nmap <C-p> :FZF<CR>
+
 " YouCompleteMe
 nmap <Leader>yc :YcmCompleter GoToDeclaration<CR>
 nmap <Leader>yf :YcmCompleter GoToDefinition<CR>
@@ -219,6 +223,10 @@ set hlsearch
 set incsearch
 nmap / /\v
 nmap ? ?\v
+
+" Highlight whitespace
+highlight ExtraWhitespace ctermbg=red guibg=red
+match ExtraWhitespace /\s\+$/
 
 " Copy/paste from the system clipboard
 set clipboard=unnamedplus
