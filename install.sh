@@ -2,56 +2,30 @@
 #
 # Installs dependencies for dotfiles
 
-# Update configuration file with user prompts
-update_file () {
-	local dst=$1
-	local src=$2
-	local result
+read -p "Install packages? [y|n]: " result
+if [ "$result" == "y" -o "$result" == "Y" ]; then
+	# Install vim with system clipboard capability
+	echo "Installing vim..."
+	sudo apt-get install -y vim-gnome
 
-	echo "Updating \"$dst\"..."
+	# Install tmux
+	echo "Installing tmux..."
+	sudo apt-get install -y tmux
 
-	if [ ! -e $src ]; then
-		echo "ERR: Cannot find \"$src\""
-		exit 1
-	fi
+	# xclip (for tmux vi-copy)
+	echo "Installing xclip..."
+	sudo apt-get install -y xclip
 
-	if [ ! -e $dst  ]; then
-		echo "Creating new file at $dst"
-		cp $src $dst
-		echo "Copied \"$src\" to \"$dst\""
-	else
-		if [ -z "$(diff $src $dst)" ]; then
-			echo "\"$src\" and \"$dst\" are identical"
-		else
-			echo "\"$src\" and \"$dst\" differ"
-			if [ "$(ls -t $src $dst | head -n1)" == "$src" ]; then
-				read -p "Do you want to update \"$dst\" with a newer \"$src\"? [y|n]: " result
-			else
-				read -p "WARN: Do you want to replace \"$dst\" with an older \"$src\"? [y|n]: " result
-			fi
+	# Tagbar
+	echo "Installing exuberant-ctags..."
+	sudo apt-get install -y exuberant-ctags
 
-			if [ "$result" == "y" -o "$result" == "Y" ]; then
-				cp $src $dst
-				echo "Copied \"$src\" to \"$dst\""
-			elif [ "$result" == "n" -o "$result" == "N" ]; then
-				echo "Skipping \"$dst\" update"
-			else
-				echo "ERR: Unknown option \"$result\""
-				exit 1
-			fi
-		fi
-	fi
-
-	echo "Done"
-}
-
-# Install vim with system clipboard capability
-echo "Installing vim..."
-sudo apt-get install -y vim-gnome
-
-# Install tmux
-echo "Installing tmux..."
-sudo apt-get install -y tmux
+elif [ "$result" == "n" -o "$result" == "N" ]; then
+	echo "Skipped installing packages"
+else
+	echo "ERR: Unknown option \"$result\""
+	exit 1
+fi
 
 # Install Vundle
 echo "Checking Vundle install..."
@@ -60,10 +34,10 @@ if [ ! -d "$HOME/.vim/bundle/Vundle.vim" ]; then
 fi
 
 # Update vimrc
-update_file ~/.vimrc vimrc
+ln -frs vimrc ~/.vimrc
 
 # Update tmux.conf
-update_file ~/.tmux.conf tmux.conf
+ln -frs tmux.conf ~/.tmux.conf
 
 # Update vimrc plugins
 echo "Updating vim plugins..."
@@ -99,33 +73,13 @@ else
 	exit 1
 fi
 
-# xclip (for tmux vi-copy)
-echo "Installing xclip..."
-sudo apt-get install -y xclip
-
-# Tagbar
-echo "Installing exuberant-ctags..."
-sudo apt-get install -y exuberant-ctags
-
 # fzf
 if [ ! -d "$HOME/.fzf" ]; then
 	git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
 	~/.fzf/install
-fi
-
-# Configure YouCompleteMe
-echo "Installing Clang and CMake..."
-sudo apt-get install -y build-essential cmake
-sudo apt-get install -y python-dev python3-dev
-read -p "Compile Clang completer for YouCompleteMe? [y|n]: " result
-if [ "$result" == "y" -o "$result" == "Y" ]; then
-	pushd ~/.vim/bundle/youcompleteme
-	./install.py --clang-completer
-	popd
-	echo "Compiled Clang completer"
-elif [ "$result" == "n" -o "$result" == "N" ]; then
-	echo "Skipped compiling Clang completer"
 else
-	echo "ERR: Unknown option \"$result\""
-	exit 1
+	pushd $HOME/.fzf
+	git pull
+	yes | ./install
+	popd
 fi
