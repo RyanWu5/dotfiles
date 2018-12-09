@@ -102,6 +102,9 @@ endif
 " Set leader key
 let mapleader = " "
 
+" Use jk as alt to <ESC>
+imap jk <ESC>
+
 " Clear hlsearch
 nmap <C-c> :nohlsearch<CR>
 
