@@ -152,24 +152,75 @@ uninstall_fzf() {
 
 install_rg() {
 	log_inf "installing rg"
-	apt_install ripgrep
+
+	# TODO: install from repos after updating to 20.04
+	# apt_install ripgrep
+
+	local pkg="ripgrep"
+	apt-mark showinstall | grep -q "^$pkg$"
+	if [ $? -ne 0 ]
+	then
+		local url="https://github.com/BurntSushi/ripgrep/releases/download/12.0.1/ripgrep_12.0.1_amd64.deb"
+		local pkg_path=$(basename $url)
+		pushd $TMPDIR
+		curl -LO $url
+		sudo dpkg -i $pkg_path
+		popd
+	fi
 }
 
 uninstall_rg() {
 	log_inf "uninstalling rg"
-	apt_remove ripgrep
+
+	# TODO: install from repos after updating to 20.04
+	# apt_remove ripgrep
+
+	local pkg="ripgrep"
+	apt-mark showinstall | grep -q "^$pkg$"
+	if [ $? -eq 0 ]
+	then
+		sudo dpkg -r $pkg
+	fi
 }
 
 #
 # neovim
 #
 
+install_neovim_from_release() {
+	local nvim_path="$HOME/bin/nvim"
+	if [ ! -d $nvim_path ]
+	then
+		log_inf "installing neovim from release"
+		mkdir -p $nvim_path
+		pushd $nvim_path
+		local url="https://github.com/neovim/neovim/releases/download/stable/nvim.appimage"
+		curl -LO $url
+		chmod u+x nvim.appimage
+		sudo ln -s $nvim_path/nvim.appimage /usr/bin/vim
+		popd
+	fi
+}
+
+uninstall_neovim_from_release() {
+	local nvim_path="$HOME/bin/nvim"
+	if [ -d $nvim_path ]
+	then
+		log_inf "uninstalling neovim from release"
+		rm -r $nvim_path
+		sudo rm /usr/bin/vim
+	fi
+}
+
 install_neovim() {
 	log_inf "installing neovim"
 
+	# TODO: install from repos after updating to 20.04
+	install_neovim_from_release
+
 	# install packages
 	log_inf "installing neovim pkgs"
-	apt_install neovim curl xclip exuberant-ctags global python3-pip
+	apt_install curl xclip exuberant-ctags global python3-pip
 	pip3 install --user pynvim
 
 	# install init.vim
@@ -190,8 +241,11 @@ install_neovim() {
 uninstall_neovim() {
 	log_inf "uninstalling neovim"
 
+	# TODO: install from repos after updating to 20.04
+	uninstall_neovim_from_release
+
 	# uninstall packages
-	apt_remove neovim
+	#apt_remove neovim
 	pip3 uninstall --yes pynvim
 
 	# uninstall init.vim

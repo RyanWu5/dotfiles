@@ -137,24 +137,12 @@ nnoremap <Leader>gs :Gstatus<CR>
 nnoremap <Leader>f :Files<CR>
 nnoremap <Leader>b :Buffers<CR>
 nnoremap <Leader>r :Rg<CR>
-nnoremap <Leader>g :Tags<CR>
+nnoremap <Leader>t :Tags<CR>
 
 " tab completion
 inoremap <expr> <tab> pumvisible() ? "\<C-n>" : "\<tab>"
 inoremap <expr> <C-j> pumvisible() ? "\<C-n>" : "\<C-j>"
 inoremap <expr> <C-k> pumvisible() ? "\<C-p>" : "\<C-k>"
-
-" terminal
-if has('nvim')
-	" New terminal
-	noremap <Leader>t :terminal<CR>
-
-	" <esc> to return to normal mode
-	tnoremap <esc> <C-\><C-N>
-
-	" Start terminal without line numbers
-	autocmd TermOpen * setlocal nonumber norelativenumber
-endif
 
 " +----------------------------------------------------------------------------+
 " | Appearance
