@@ -28,7 +28,6 @@ if dein#load_state('~/.cache/dein')
 	" statusbar
 	call dein#add('vim-airline/vim-airline')
 	call dein#add('vim-airline/vim-airline-themes')
-	call dein#add('powerline/fonts')
 
 	" git
 	call dein#add('tpope/vim-fugitive')

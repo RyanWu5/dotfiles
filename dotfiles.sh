@@ -1,6 +1,7 @@
 #!/bin/bash
 
 DOTFILES_ROOT="$(dirname $(realpath $0))"
+INSTALL_VIA_APT=true
 TMPDIR=
 
 ################################################################################
@@ -34,12 +35,9 @@ log_inf() {
 symlink() {
 	local src=$1
 	local dst=$2
-	local dst_parent=$(dirname $(realpath $dst))
+	local dst_parent="$(dirname $dst)"
 
-	if [ ! -d $dst_parent ]
-	then
-		mkdir --parents $dst_parent
-	fi
+	mkdir --parent $dst_parent
 
 	if [ ! -f $dst ]
 	then
@@ -153,33 +151,37 @@ uninstall_fzf() {
 install_rg() {
 	log_inf "installing rg"
 
-	# TODO: install from repos after updating to 20.04
-	# apt_install ripgrep
-
-	local pkg="ripgrep"
-	apt-mark showinstall | grep -q "^$pkg$"
-	if [ $? -ne 0 ]
+	if [ "$INSTALL_VIA_APT" == "true" ]
 	then
-		local url="https://github.com/BurntSushi/ripgrep/releases/download/12.0.1/ripgrep_12.0.1_amd64.deb"
-		local pkg_path=$(basename $url)
-		pushd $TMPDIR
-		curl -LO $url
-		sudo dpkg -i $pkg_path
-		popd
+		apt_install ripgrep
+	else
+		local pkg="ripgrep"
+		apt-mark showinstall | grep -q "^$pkg$"
+		if [ $? -ne 0 ]
+		then
+			local url="https://github.com/BurntSushi/ripgrep/releases/download/12.0.1/ripgrep_12.0.1_amd64.deb"
+			local pkg_path=$(basename $url)
+			pushd $TMPDIR
+			curl -LO $url
+			sudo dpkg -i $pkg_path
+			popd
+		fi
 	fi
 }
 
 uninstall_rg() {
 	log_inf "uninstalling rg"
 
-	# TODO: install from repos after updating to 20.04
-	# apt_remove ripgrep
-
-	local pkg="ripgrep"
-	apt-mark showinstall | grep -q "^$pkg$"
-	if [ $? -eq 0 ]
+	if [ "$INSTALL_VIA_APT" == "true" ]
 	then
-		sudo dpkg -r $pkg
+		apt_remove ripgrep
+	else
+		local pkg="ripgrep"
+		apt-mark showinstall | grep -q "^$pkg$"
+		if [ $? -eq 0 ]
+		then
+			sudo dpkg -r $pkg
+		fi
 	fi
 }
 
@@ -215,12 +217,16 @@ uninstall_neovim_from_release() {
 install_neovim() {
 	log_inf "installing neovim"
 
-	# TODO: install from repos after updating to 20.04
-	install_neovim_from_release
+	if [ "$INSTALL_VIA_APT" == "true" ]
+	then
+		apt_install neovim
+	else
+		install_neovim_from_release
+	fi
 
-	# install packages
-	log_inf "installing neovim pkgs"
-	apt_install curl xclip exuberant-ctags global python3-pip
+	# install support packages
+	log_inf "installing neovim support pkgs"
+	apt_install curl xclip exuberant-ctags global python3-pip fonts-powerline
 	pip3 install --user pynvim
 
 	# install init.vim
@@ -236,16 +242,23 @@ install_neovim() {
 			$TMPDIR/installer.sh
 		sh $TMPDIR/installer.sh $dein_path
 	fi
+
+	# start vim to install plugins
+	vim -c ":q"
 }
 
 uninstall_neovim() {
 	log_inf "uninstalling neovim"
 
-	# TODO: install from repos after updating to 20.04
-	uninstall_neovim_from_release
+	if [ "$INSTALL_VIA_APT" == "true" ]
+	then
+		apt_remove neovim
+	else
+		uninstall_neovim_from_release
+	fi
 
-	# uninstall packages
-	#apt_remove neovim
+	# uninstall support packages
+	log_inf "uninstalling neovim support pkgs"
 	pip3 uninstall --yes pynvim
 
 	# uninstall init.vim
@@ -268,12 +281,48 @@ uninstall_neovim() {
 # tmux
 #
 
+
+install_tmux_from_release() {
+	local tmux_path="$HOME/bin/tmux"
+	if [ ! -d $tmux_path ]
+	then
+		log_inf "installing tmux from release"
+		apt_install libevent-dev libncurses-dev
+		mkdir -p $tmux_path
+		pushd $tmux_path
+		local url="https://github.com/tmux/tmux/releases/download/3.1/tmux-3.1.tar.gz"
+		local pkg_path=$(basename $url)
+		local unpacked_path=$(basename --suffix=.tar.gz $pkg_path)
+		curl -LO $url
+		tar -xzf $pkg_path
+		pushd $unpacked_path
+		./configure && make
+		sudo ln -s $tmux_path/$unpacked_path/tmux /usr/bin/tmux
+		popd
+		popd
+	fi
+}
+
+uninstall_tmux_from_release() {
+	local tmux_path="$HOME/bin/tmux"
+	if [ -d $tmux_path ]
+	then
+		log_inf "uninstalling tmux from release"
+		rm -r $tmux_path
+		sudo rm /usr/bin/tmux
+	fi
+}
+
 install_tmux() {
 	log_inf "installing tmux"
 
 	# install packages
-	log_inf "installing tmux pkgs"
-	apt_install tmux
+	if [ "$INSTALL_VIA_APT" == "true" ]
+	then
+		apt_install tmux
+	else
+		install_tmux_from_release
+	fi
 
 	# install init.vim
 	log_inf "installing tmux.conf"
@@ -288,8 +337,12 @@ install_tmux() {
 uninstall_tmux() {
 	log_inf "uninstalling tmux"
 
-	# uninstalling packages
-	apt_remove tmux
+	if [ "$INSTALL_VIA_APT" == "true" ]
+	then
+		apt_remove tmux
+	else
+		uninstall_tmux_from_release
+	fi
 
 	# uninstall init.vim
 	if [ -f $HOME/.tmux.conf ]
@@ -329,16 +382,23 @@ uninstall_all() {
 }
 
 usage() {
-	log_inf "dotfiles.sh [-hxiu]"
-	log_inf " -h     Print usage"
-	log_inf " -x     Enable verbose debugging"
+	log_inf "dotfiles.sh <-i|-u> [-hxar]"
+	echo
+	log_inf "Required:"
 	log_inf " -i     Install dotfiles"
 	log_inf " -u     Uninstall dotfiles"
+	echo
+	log_inf "Optional:"
+	log_inf " -h     Print usage"
+	log_inf " -x     Enable verbose debugging"
+	log_inf " -a     Use apt packages (default)"
+	log_inf " -r     Use upstream release packages"
+	echo
 }
 
 main() {
 	local mode=
-	while getopts ":hiu" opt
+	while getopts ":hiuar" opt
 	do
 		case $opt in
 			h)
@@ -353,6 +413,12 @@ main() {
 				;;
 			u)
 				mode="uninstall"
+				;;
+			a)
+				INSTALL_VIA_APT=true
+				;;
+			r)
+				INSTALL_VIA_APT=false
 				;;
 			\?)
 				log_err "invalid option: $OPTARG"
