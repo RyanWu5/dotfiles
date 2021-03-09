@@ -124,15 +124,14 @@ install_dotfiles() {
 	echo "$BASHRC_FOOTER"          >> $HOME/.bashrc
 
 	# Install plugins
-	local fzf_src="$DOTFILES_ROOT/plugins/fzf/bin/fzf"
-	local fzf_dst="$HOME/.vim/plugged/fzf/bin"
-	mkdir -p "$fzf_dst"
-	cp "$fzf_src" "$fzf_dst"
-
 	vim +PlugInstall +qall
 
 	TMUXLINE_SNAPFILE="~/.tmuxline.snap"
 	tmux new 'vim +"TmuxlineSnapshot! $TMUXLINE_SNAPFILE" +qall'
+
+	mkdir -p "$HOME/.vim/plugged/fzf/bin"
+	cp "$DOTFILES_ROOT/plugins/fzf/bin/fzf" "$HOME/.vim/plugged/fzf/bin"
+	$HOME/.vim/plugged/fzf/install --all
 }
 
 make_local_dotfiles() {
