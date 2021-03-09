@@ -84,6 +84,12 @@ install_from_internet() {
 }
 
 install_from_local() {
+	# If neovim is not installed, then we are probably missing dependencies
+	if ! check_deps nvim; then
+		log_wrn "install missing dependencies:\nsudo apt install $APT_PACKAGES && pip3 install --user $PIP3_PACKAGES --upgrade"
+		return
+	fi
+
 	log_inf "installing from local path: $DOTFILES_ROOT"
 
 	# vim plug
@@ -96,7 +102,6 @@ install_from_local() {
 
 	install_dotfiles
 
-	log_wrn "install dependencies:\nsudo apt install $APT_PACKAGES && pip3 install --user $PIP3_PACKAGES --upgrade"
 }
 
 install_dotfiles() {
@@ -119,9 +124,15 @@ install_dotfiles() {
 	echo "$BASHRC_FOOTER"          >> $HOME/.bashrc
 
 	# Install plugins
-	TMUXLINE_SNAPFILE="~/.tmuxline.snap"
-	tmux new 'vim +PlugInstall +"TmuxlineSnapshot! $TMUXLINE_SNAPFILE" +qall'
+	local fzf_src="$DOTFILES_ROOT/plugins/fzf/bin/fzf"
+	local fzf_dst="$HOME/.vim/plugged/fzf/bin"
+	mkdir -p "$fzf_dst"
+	cp "$fzf_src" "$fzf_dst"
 
+	vim +PlugInstall +qall
+
+	TMUXLINE_SNAPFILE="~/.tmuxline.snap"
+	tmux new 'vim +"TmuxlineSnapshot! $TMUXLINE_SNAPFILE" +qall'
 }
 
 make_local_dotfiles() {
@@ -164,6 +175,12 @@ make_local_dotfiles() {
 		git -C "$path/plugins" clone "https://github.com/$src.git"
 		sed -i "s@^Plug[ \t]*'$src'@Plug '$dst'@" "$path/src/init.vim"
 	done <<< $(grep "^Plug[ \t]*'[^']*'" "$path/src/init.vim")
+
+	eval "$path/plugins/fzf/install --bin"
+	local fzf_bin="$path/plugins/fzf/bin/fzf"
+	if [ -L "$fzf_bin" ]; then
+		cp --remove-destination $(readlink -e "$fzf_bin") "$fzf_bin"
+	fi
 }
 
 ################################################################################
