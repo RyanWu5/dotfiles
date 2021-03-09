@@ -4,87 +4,62 @@
 " | Plugins
 " +----------------------------------------------------------------------------+
 
-" dein.vim : plugin manager
 if &compatible
 	set nocompatible
 endif
 
-" Add the dein installation directory into runtimepath
-set runtimepath+=~/.cache/dein/repos/github.com/Shougo/dein.vim
+" Specify a directory for plugins
+call plug#begin('~/.vim/plugged')
 
-if dein#load_state('~/.cache/dein')
-	call dein#begin('~/.cache/dein')
+" colorscheme
+Plug 'w0ng/vim-hybrid'
 
-	call dein#add('~/.cache/dein/repos/github.com/Shougo/dein.vim')
-	call dein#add('Shougo/deoplete.nvim')
-	if !has('nvim')
-		call dein#add('roxma/nvim-yarp')
-		call dein#add('roxma/vim-hug-neovim-rpc')
-	endif
+" statusbar
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 
-	" colorscheme
-	call dein#add('w0ng/vim-hybrid')
+" fzf
+Plug 'junegunn/fzf', { 'dir': '~/.vim/plugged/fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
 
-	" statusbar
-	call dein#add('vim-airline/vim-airline')
-	call dein#add('vim-airline/vim-airline-themes')
+" tmux
+Plug 'christoomey/vim-tmux-navigator'
+Plug 'edkolev/tmuxline.vim'
 
-	" git
-	call dein#add('tpope/vim-fugitive')
-	call dein#add('airblade/vim-gitgutter')
+" tags
+Plug 'ludovicchabant/vim-gutentags'
+Plug 'skywind3000/gutentags_plus'
 
-	" fzf
-	set runtimepath+=~/.fzf
-	call dein#add('junegunn/fzf.vim')
+" quality of life
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-repeat'
 
-	" tmux
-	call dein#add('christoomey/vim-tmux-navigator')
-	call dein#add('edkolev/tmuxline.vim')
+" autocompletion
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'Shougo/neco-syntax'
+Plug 'Shougo/deoplete-clangx'
+Plug 'deoplete-plugins/deoplete-jedi'
 
-	" window movement
-	call dein#add('wesQ3/vim-windowswap')
-
-	" tags
-	call dein#add('ludovicchabant/vim-gutentags')
-	call dein#add('skywind3000/gutentags_plus')
-
-	" quality of life
-	call dein#add('tpope/vim-commentary')
-	call dein#add('tpope/vim-eunuch')
-	call dein#add('tpope/vim-surround')
-	call dein#add('tpope/vim-repeat')
-
-	call dein#end()
-	call dein#save_state()
-endif
-
-filetype plugin indent on
-syntax enable
-
-" Install new plugins on startup
-if dein#check_install()
-	call dein#install()
-endif
+" Initialize plugin system
+call plug#end()
 
 " +----------------------------------------------------------------------------+
 " | Plugin Options
 " +----------------------------------------------------------------------------+
 
-" deoplete
-let g:deoplete#enable_at_startup = 1
-
 " vim-airline
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
-
-" windowsnap
-let g:windowswap_map_keys = 0 "prevent default bindings
 
 " gutentags
 let g:gutentags_modules = ['ctags', 'gtags_cscope']
 let g:gutentags_project_root = ['.root']
 let g:gutentags_cache_dir = '~/.cache/tags'
 let g:gutentags_plus_switch = 1
+
+" deoplete
+let g:deoplete#enable_at_startup = 1
+set completeopt-=preview
 
 " +----------------------------------------------------------------------------+
 " | Remaps
@@ -119,18 +94,12 @@ nnoremap <C-l> <C-w>l
 
 nnoremap <Leader>s <C-w>s
 nnoremap <Leader>v <C-w>v
-nnoremap <Leader>= <C-w>=
-nnoremap <leader>w :call WindowSwap#EasyWindowSwap()<CR>
+nnoremap <Leader>w <C-w>=
 
 nnoremap <Leader>n :bnext<CR>
 nnoremap <Leader>p :bprevious<CR>
 nnoremap <Leader>l :buffer #<CR>
 nnoremap <Leader>d :bdelete<CR>
-
-" fugitive
-nnoremap <Leader>gb :Gblame<CR>
-nnoremap <Leader>gd :Gdiff<CR>
-nnoremap <Leader>gs :Gstatus<CR>
 
 " fzf
 nnoremap <Leader>f :Files<CR>
@@ -161,6 +130,9 @@ highlight SpecialChar ctermfg=167 guifg=#cc6666
 
 " vim-airline theme
 let g:airline_theme = 'wombat'
+
+" Drop mode information
+set noshowmode
 
 " Show cursor line
 set cursorline

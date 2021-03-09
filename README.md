@@ -1,8 +1,16 @@
 # dotfiles
-My dotfiles
+My dotfiles.
 
-# Install
-1. Run './dotfiles.sh -i'
+## Usage
 
-# Uninstall
-1. Run './dotfiles.sh -u'
+```
+dotfiles.sh <-i|-l PATH> [-hx]
+
+Required: (exactly one)
+ -i        Install dotfiles.
+ -l PATH   Stage local installation at PATH.
+
+Optional:
+ -h        Print usage.
+ -x        Enable verbose debugging.
+ ```
