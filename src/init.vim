@@ -32,6 +32,7 @@ Plug 'skywind3000/gutentags_plus'
 
 " quality of life
 Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-repeat'
 
 " autocompletion
@@ -106,6 +107,9 @@ nnoremap <Leader>f :Files<CR>
 nnoremap <Leader>b :Buffers<CR>
 nnoremap <Leader>r :Rg<CR>
 nnoremap <Leader>t :Tags<CR>
+
+" vim-fugitive
+nnoremap <Leader>g :Gdiffsplit<CR>
 
 " tab completion
 inoremap <expr> <tab> pumvisible() ? "\<C-n>" : "\<tab>"
