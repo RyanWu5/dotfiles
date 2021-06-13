@@ -129,8 +129,10 @@ install_dotfiles() {
 	TMUXLINE_SNAPFILE="~/.tmuxline.snap"
 	tmux new 'vim +"TmuxlineSnapshot! $TMUXLINE_SNAPFILE" +qall'
 
-	mkdir -p "$HOME/.vim/plugged/fzf/bin"
-	cp "$DOTFILES_ROOT/plugins/fzf/bin/fzf" "$HOME/.vim/plugged/fzf/bin"
+	if [ ! -d "$HOME/.vim/plugged/fzf" ]; then
+		mkdir -p "$HOME/.vim/plugged/fzf/bin"
+		cp "$DOTFILES_ROOT/plugins/fzf/bin/fzf" "$HOME/.vim/plugged/fzf/bin"
+	fi
 	$HOME/.vim/plugged/fzf/install --all
 }
 
