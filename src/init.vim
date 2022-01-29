@@ -8,38 +8,46 @@ if &compatible
 	set nocompatible
 endif
 
+if $__DOTFILES_CORE__
+	let core = $__DOTFILES_CORE__
+else
+	let core = 0
+endif
+
 " Specify a directory for plugins
 call plug#begin('~/.vim/plugged')
 
 " colorscheme
 Plug 'w0ng/vim-hybrid'
 
-" statusbar
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
-
-" fzf
-Plug 'junegunn/fzf', { 'dir': '~/.vim/plugged/fzf', 'do': './install --all' }
-Plug 'junegunn/fzf.vim'
-
 " tmux
 Plug 'christoomey/vim-tmux-navigator'
-Plug 'edkolev/tmuxline.vim'
 
-" tags
-Plug 'ludovicchabant/vim-gutentags'
-Plug 'skywind3000/gutentags_plus'
+if !core
+	" statusbar
+	Plug 'vim-airline/vim-airline'
+	Plug 'vim-airline/vim-airline-themes'
+	Plug 'edkolev/tmuxline.vim'
 
-" quality of life
-Plug 'tpope/vim-commentary'
-Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-repeat'
+	" fzf
+	Plug 'junegunn/fzf', { 'dir': '~/.vim/plugged/fzf', 'do': './install --all' }
+	Plug 'junegunn/fzf.vim'
 
-" autocompletion
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'Shougo/neco-syntax'
-Plug 'Shougo/deoplete-clangx'
-Plug 'deoplete-plugins/deoplete-jedi'
+	" tags
+	Plug 'ludovicchabant/vim-gutentags'
+	Plug 'skywind3000/gutentags_plus'
+
+	" autocompletion
+	Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+	Plug 'Shougo/neco-syntax'
+	Plug 'Shougo/deoplete-clangx'
+	Plug 'deoplete-plugins/deoplete-jedi'
+
+	" quality of life
+	Plug 'tpope/vim-commentary'
+	Plug 'tpope/vim-repeat'
+	Plug 'tpope/vim-fugitive'
+endif
 
 " Initialize plugin system
 call plug#end()
@@ -48,19 +56,21 @@ call plug#end()
 " | Plugin Options
 " +----------------------------------------------------------------------------+
 
-" vim-airline
-let g:airline_powerline_fonts = 1
-let g:airline#extensions#tabline#enabled = 1
+if !core
+	" vim-airline
+	let g:airline_powerline_fonts = 1
+	let g:airline#extensions#tabline#enabled = 1
 
-" gutentags
-let g:gutentags_modules = ['ctags', 'gtags_cscope']
-let g:gutentags_project_root = ['.root']
-let g:gutentags_cache_dir = '~/.cache/tags'
-let g:gutentags_plus_switch = 1
+	" gutentags
+	let g:gutentags_modules = ['ctags', 'gtags_cscope']
+	let g:gutentags_project_root = ['.root']
+	let g:gutentags_cache_dir = '~/.cache/tags'
+	let g:gutentags_plus_switch = 1
 
-" deoplete
-let g:deoplete#enable_at_startup = 1
-set completeopt-=preview
+	" deoplete
+	let g:deoplete#enable_at_startup = 1
+	set completeopt-=preview
+endif
 
 " +----------------------------------------------------------------------------+
 " | Remaps
@@ -102,19 +112,21 @@ nnoremap <Leader>p :bprevious<CR>
 nnoremap <Leader>l :buffer #<CR>
 nnoremap <Leader>d :bdelete<CR>
 
-" fzf
-nnoremap <Leader>f :Files<CR>
-nnoremap <Leader>b :Buffers<CR>
-nnoremap <Leader>r :Rg<CR>
-nnoremap <Leader>t :Tags<CR>
+if !core
+	" fzf
+	nnoremap <Leader>f :Files<CR>
+	nnoremap <Leader>b :Buffers<CR>
+	nnoremap <Leader>r :Rg<CR>
+	nnoremap <Leader>t :Tags<CR>
 
-" vim-fugitive
-nnoremap <Leader>g :Gdiffsplit<CR>
+	" deoplete
+	inoremap <expr> <tab> pumvisible() ? "\<C-n>" : "\<tab>"
+	inoremap <expr> <C-j> pumvisible() ? "\<C-n>" : "\<C-j>"
+	inoremap <expr> <C-k> pumvisible() ? "\<C-p>" : "\<C-k>"
 
-" tab completion
-inoremap <expr> <tab> pumvisible() ? "\<C-n>" : "\<tab>"
-inoremap <expr> <C-j> pumvisible() ? "\<C-n>" : "\<C-j>"
-inoremap <expr> <C-k> pumvisible() ? "\<C-p>" : "\<C-k>"
+	" vim-fugitive
+	nnoremap <Leader>g :Gdiffsplit<CR>
+endif
 
 " +----------------------------------------------------------------------------+
 " | Appearance
@@ -129,14 +141,8 @@ highlight Normal ctermfg=White
 " Set background to terminal
 highlight Normal ctermbg=None
 
-" Set special char to blue
+" Set special char to red
 highlight SpecialChar ctermfg=167 guifg=#cc6666
-
-" vim-airline theme
-let g:airline_theme = 'wombat'
-
-" Drop mode information
-set noshowmode
 
 " Show cursor line
 set cursorline
@@ -150,6 +156,14 @@ set colorcolumn=81
 " Tab width
 set shiftwidth=4
 set tabstop=4
+
+if !core
+	" vim-airline theme
+	let g:airline_theme = 'wombat'
+
+	" Drop mode information
+	set noshowmode
+endif
 
 " +----------------------------------------------------------------------------+
 " | Miscellaneous

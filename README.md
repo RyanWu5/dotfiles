@@ -13,4 +13,5 @@ Required: (exactly one)
 Optional:
  -h        Print usage.
  -x        Enable verbose debugging.
+ -c        Core install.
  ```

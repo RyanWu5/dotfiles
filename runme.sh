@@ -1,6 +1,7 @@
 #/bin/bash
 
 DOTFILES_ROOT="$(dirname $(realpath $0))"
+CORE=false
 
 ################################################################################
 # Logging
@@ -45,7 +46,9 @@ prompt() {
 # Funcs
 ################################################################################
 
-APT_PACKAGES="neovim tmux ripgrep git xclip exuberant-ctags global clang python3-pip fonts-powerline"
+CORE_APT_PACKAGES="neovim tmux xclip"
+EXTRA_APT_PACKAGES="python3-pip git ripgrep exuberant-ctags global clang fonts-powerline"
+
 PIP3_PACKAGES="jedi"
 
 BASHRC_HEADER="##### DOTFILES HDR #####"
@@ -70,11 +73,20 @@ install_from_internet() {
 	fi
 
 	# packages
-	log_inf "installing apt dependencies"
-	sudo apt install -y $APT_PACKAGES
+	local apt_packages="$CORE_APT_PACKAGES"
+	if [ "$CORE" == false ]; then
+		apt_packages+=" $EXTRA_APT_PACKAGES"
+	fi
 
-	log_inf "installing pip3 dependencies"
-	pip3 install --user $PIP3_PACKAGES --upgrade
+	if [ -n $apt_packages ]; then
+		log_inf "installing apt dependencies"
+		sudo apt install -y $apt_packages
+	fi
+
+	if [ "$CORE" == false ] && [ -n $PIP3_PACKAGES ]; then
+		log_inf "installing pip3 dependencies"
+		pip3 install --user $PIP3_PACKAGES --upgrade
+	fi
 
 	# vim plug
 	curl -fLo $HOME/.local/share/nvim/site/autoload/plug.vim --create-dirs \
@@ -86,7 +98,15 @@ install_from_internet() {
 install_from_local() {
 	# If neovim is not installed, then we are probably missing dependencies
 	if ! check_deps nvim; then
-		log_wrn "install missing dependencies:\nsudo apt install $APT_PACKAGES && pip3 install --user $PIP3_PACKAGES --upgrade"
+		local apt_packages="$CORE_APT_PACKAGES"
+		if [ "$CORE" == false ]; then
+			apt_packages+=" $EXTRA_APT_PACKAGES"
+		fi
+		log_wrn "install missing dependencies:"
+		log_wrn "sudo apt install $apt_packages"
+		if [ "$CORE" == false ] && [ -n $PIP3_PACKAGES ]; then
+			log_wrn "pip3 install --user $PIP3_PACKAGES --upgrade"
+		fi
 		return
 	fi
 
@@ -97,7 +117,7 @@ install_from_local() {
 	cp $DOTFILES_ROOT/plugins/plug.vim \
 		$HOME/.local/share/nvim/site/autoload/plug.vim
 
-	sed -i "s@^Plug[ \t]*'$DOTFILES_PLUGIN_MARKER@Plug 'file://$DOTFILES_ROOT@" \
+	sed -i "s@Plug[ \t]*'$DOTFILES_PLUGIN_MARKER@Plug 'file://$DOTFILES_ROOT@" \
 		$DOTFILES_ROOT/src/init.vim
 
 	install_dotfiles
@@ -119,21 +139,29 @@ install_dotfiles() {
 	if [ -f $HOME/.bashrc ]; then
 		sed -i "/^${BASHRC_HEADER}\$/,/^${BASHRC_FOOTER}\$/d" $HOME/.bashrc
 	fi
-	echo "$BASHRC_HEADER"          >> $HOME/.bashrc
-	cat  $DOTFILES_ROOT/src/bashrc >> $HOME/.bashrc
-	echo "$BASHRC_FOOTER"          >> $HOME/.bashrc
+	echo "$BASHRC_HEADER"                   >> $HOME/.bashrc
+	cat  $DOTFILES_ROOT/src/bashrc          >> $HOME/.bashrc
+	if [ "$CORE" == true ]; then
+		echo "export __DOTFILES_CORE__=1"   >> $HOME/.bashrc
+	fi
+	echo "$BASHRC_FOOTER"                   >> $HOME/.bashrc
 
 	# Install plugins
+	if [ "$CORE" == true ]; then
+		export __DOTFILES_CORE__=1
+	fi
 	vim +PlugInstall +qall
 
-	TMUXLINE_SNAPFILE="~/.tmuxline.snap"
-	tmux new 'vim +"TmuxlineSnapshot! $TMUXLINE_SNAPFILE" +qall'
+	if [ "$CORE" == false ]; then
+		TMUXLINE_SNAPFILE="~/.tmuxline.snap"
+		tmux new 'vim +"TmuxlineSnapshot! $TMUXLINE_SNAPFILE" +qall'
 
-	if [ ! -d "$HOME/.vim/plugged/fzf" ]; then
-		mkdir -p "$HOME/.vim/plugged/fzf/bin"
-		cp "$DOTFILES_ROOT/plugins/fzf/bin/fzf" "$HOME/.vim/plugged/fzf/bin"
+		if [ ! -d "$HOME/.vim/plugged/fzf" ]; then
+			mkdir -p "$HOME/.vim/plugged/fzf/bin"
+			cp "$DOTFILES_ROOT/plugins/fzf/bin/fzf" "$HOME/.vim/plugged/fzf/bin"
+		fi
+		$HOME/.vim/plugged/fzf/install --all
 	fi
-	$HOME/.vim/plugged/fzf/install --all
 }
 
 make_local_dotfiles() {
@@ -170,12 +198,12 @@ make_local_dotfiles() {
 	while read line; do
 		log_inf "Processing plugin: $line"
 		echo $line
-		local src="$(echo "$line" | sed "s/^Plug[ \t]*'\([^']*\)'.*$/\1/")"
+		local src="$(echo "$line" | sed "s/Plug[ \t]*'\([^']*\)'.*/\1/")"
 		# TODO: Handle other valid plugin forms
 		local dst="$DOTFILES_PLUGIN_MARKER/plugins/$(basename $src)"
 		git -C "$path/plugins" clone "https://github.com/$src.git"
-		sed -i "s@^Plug[ \t]*'$src'@Plug '$dst'@" "$path/src/init.vim"
-	done <<< $(grep "^Plug[ \t]*'[^']*'" "$path/src/init.vim")
+		sed -i "s@Plug[ \t]*'$src'@Plug '$dst'@" "$path/src/init.vim"
+	done <<< $(grep "Plug[ \t]*'[^']*'" "$path/src/init.vim")
 
 	eval "$path/plugins/fzf/install --bin"
 	local fzf_bin="$path/plugins/fzf/bin/fzf"
@@ -189,7 +217,7 @@ make_local_dotfiles() {
 ################################################################################
 
 usage() {
-	log_inf "dotfiles.sh <-i|-l PATH> [-hx]"
+	log_inf "dotfiles.sh <-i [-c] | -l PATH> [-hx]"
 	echo
 	log_inf "Required: (exactly one)"
 	log_inf " -i        Install dotfiles."
@@ -198,13 +226,14 @@ usage() {
 	log_inf "Optional:"
 	log_inf " -h        Print usage."
 	log_inf " -x        Enable verbose debugging."
+	log_inf " -c        Install core only."
 	echo
 }
 
 main() {
 	local mode=
 	local path=
-	while getopts ":hil:" opt
+	while getopts ":hxil:c" opt
 	do
 		case $opt in
 			h)
@@ -221,6 +250,9 @@ main() {
 				mode="local"
 				path="$OPTARG"
 				;;
+			c)
+				CORE=true
+				;;
 			\?)
 				log_err "invalid option: $OPTARG"
 				;;
@@ -231,11 +263,14 @@ main() {
 	done
 	shift $((OPTIND -1))
 
-	if [ -z "$mode" ]
-	then
+	if [ -z "$mode" ]; then
 		log_err "nothing to do"
 		usage
 		return 1
+	fi
+
+	if [ "$CORE" == true ] && [ "$mode" != "install" ]; then
+		log_wrn "option 'core' ignored in mode: $mode"
 	fi
 
 	case $mode in
