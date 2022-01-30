@@ -138,7 +138,9 @@ colorscheme hybrid
 " Set primary text to white
 highlight Normal ctermfg=White
 
-" Set background to terminal
+" Set background to match terminal
+" (temporary change to black fixes colors in some cases)
+highlight Normal ctermbg=Black
 highlight Normal ctermbg=None
 
 " Set special char to red
