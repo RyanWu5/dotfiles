@@ -78,12 +78,12 @@ install_from_internet() {
 		apt_packages+=" $EXTRA_APT_PACKAGES"
 	fi
 
-	if [ -n $apt_packages ]; then
+	if [ -n "$apt_packages" ]; then
 		log_inf "installing apt dependencies"
 		sudo apt install -y $apt_packages
 	fi
 
-	if [ "$CORE" == false ] && [ -n $PIP3_PACKAGES ]; then
+	if [ "$CORE" == false ] && [ -n "$PIP3_PACKAGES" ]; then
 		log_inf "installing pip3 dependencies"
 		pip3 install --user $PIP3_PACKAGES --upgrade
 	fi
